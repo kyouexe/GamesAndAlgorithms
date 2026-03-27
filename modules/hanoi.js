@@ -1,10 +1,3 @@
-/**
- * HANOI.JS — Tower of Hanoi using Recursive State-Space Search
- *
- * Algorithm:  Recursive solve(n, src, dst, aux) → optimal move sequence
- * State Space: Distribution of N disks across 3 pegs (3^N total states)
- * Optimal:    2^N - 1 moves
- */
 
 (function HanoiModule() {
   const canvas    = document.getElementById('hanoi-canvas');
