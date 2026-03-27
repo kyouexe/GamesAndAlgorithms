@@ -73,4 +73,3 @@ Watch the optimal recursive solution to the **Tower of Hanoi** puzzle.
 
 ---
 
-*Created for educational purposes and college seminar presentations.*
