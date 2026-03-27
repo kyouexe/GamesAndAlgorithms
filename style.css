@@ -1,9 +1,4 @@
-/* =====================================================================
-   STYLE.CSS — AI Algorithm Explorer
-   Global design system: dark glassmorphism aesthetic, typography, layout
-===================================================================== */
 
-/* ---------- CSS Variables (Design Tokens) ---------- */
 :root {
   --bg-base: #080c14;
   --bg-surface: rgba(255,255,255,0.04);
