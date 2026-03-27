@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Games and Algorithms</title>
+  <meta name="description" content="An interactive web application to explore and visualize core AI algorithms: A*, CSP Map Coloring, Minimax Checkers, and Tower of Hanoi BFS."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header">
+    <div class="header-logo">
+      <span class="logo-icon">⬡</span>
+      <h1 class="logo-text">Games and Algorithms</h1>
+    </div>
+    <nav class="nav" id="main-nav">
+      <button class="nav-btn active" data-module="home">Dashboard</button>
+      <button class="nav-btn" data-module="pathfinder">Pathfinder</button>
+      <button class="nav-btn" data-module="mapcolor">Map Coloring</button>
+      <button class="nav-btn" data-module="checkers">Checkers</button>
+      <button class="nav-btn" data-module="hanoi">Tower of Hanoi</button>
+    </nav>
+  </header>
+
+  <!-- ===================== MAIN ===================== -->
+  <main id="app-root">
+
+    <!-- ---- HOME DASHBOARD ---- -->
+    <section id="module-home" class="module active">
+      <div class="home-hero">
+        
+        <h2 class="hero-title">Explore. Visualize. Understand.</h2>
+        <p class="hero-sub">Four interactive modules demonstrating foundational AI algorithms from graph search to game-playing agents.</p>
+      </div>
+      <div class="card-grid">
+        <div class="card" data-module="pathfinder">
+          <div class="card-icon">🗺️</div>
+          <h3>Pathfinder</h3>
+          <p>Draw walls, place start/end nodes, and watch A* with Manhattan Distance find the optimal path in real-time.</p>
+          <span class="card-tag">A* Search</span>
+          <button class="btn-primary card-btn" data-module="pathfinder">Launch →</button>
+        </div>
+        <div class="card" data-module="mapcolor">
+          <div class="card-icon">🎨</div>
+          <h3>Map Coloring</h3>
+          <p>A Constraint Satisfaction Problem solved with Backtracking and Forward Checking across 6 connected regions.</p>
+          <span class="card-tag">CSP · Backtracking</span>
+          <button class="btn-primary card-btn" data-module="mapcolor">Launch →</button>
+        </div>
+        <div class="card" data-module="checkers">
+          <div class="card-icon">♟️</div>
+          <h3>Checkers AI</h3>
+          <p>Play against an AI opponent powered by Minimax with Alpha-Beta Pruning. You are Red, AI is Black.</p>
+          <span class="card-tag">Minimax · Alpha-Beta</span>
+          <button class="btn-primary card-btn" data-module="checkers">Launch →</button>
+        </div>
+        <div class="card" data-module="hanoi">
+          <div class="card-icon">🗼</div>
+          <h3>Tower of Hanoi</h3>
+          <p>Visualize the recursive optimal solution for 3–5 disks with step-by-step animated moves.</p>
+          <span class="card-tag">Recursive Search</span>
+          <button class="btn-primary card-btn" data-module="hanoi">Launch →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- PATHFINDER MODULE ---- -->
+    <section id="module-pathfinder" class="module">
+      <div class="module-header">
+        <h2>Pathfinder — A* Search Algorithm</h2>
+        <p class="module-desc">Click cells to draw walls. Drag the <span class="tag-s">S</span> and <span class="tag-e">E</span> nodes to reposition them. Press <strong>Start</strong> to visualize.</p>
+      </div>
+      <div class="module-layout">
+        <div class="panel-left">
+          <div class="controls-bar">
+            <button class="btn-primary" id="pf-start">▶ Visualize</button>
+            <button class="btn-secondary" id="pf-clear">⟳ Clear</button>
+            <button class="btn-secondary" id="pf-clear-walls">Clear Walls</button>
+            <div class="stat-box">
+              <span>Nodes Visited: <strong id="pf-visited">0</strong></span>
+              <span>Path Length: <strong id="pf-path-len">0</strong></span>
+            </div>
+          </div>
+          <div id="pf-legend" class="legend">
+            <span><i class="legend-dot" style="background:var(--clr-start)"></i>Start</span>
+            <span><i class="legend-dot" style="background:var(--clr-end)"></i>End</span>
+            <span><i class="legend-dot" style="background:var(--clr-wall)"></i>Wall</span>
+            <span><i class="legend-dot" style="background:var(--clr-open)"></i>Open Set</span>
+            <span><i class="legend-dot" style="background:var(--clr-closed)"></i>Closed Set</span>
+            <span><i class="legend-dot" style="background:var(--clr-path)"></i>Path</span>
+          </div>
+          <div id="pf-grid-container"></div>
+        </div>
+        <aside class="theory-panel">
+          <h3>Theory</h3>
+          <div class="theory-section">
+            <h4>Algorithm</h4>
+            <p>A* Search uses a heuristic <code>f(n) = g(n) + h(n)</code> where <code>g(n)</code> is the actual cost from start and <code>h(n)</code> is an estimate to the goal.</p>
+          </div>
+          <div class="theory-section">
+            <h4>State Space</h4>
+            <p>Every non-wall cell in the 20×20 grid represents a state. The total state space is up to 400 nodes.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Initial State</h4>
+            <p>The algorithm begins at the <strong>Start (S)</strong> node with <code>g=0, h=Manhattan Distance</code>.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Transition Model</h4>
+            <p>From any cell, movement is possible to 4 adjacent non-wall cells (Up, Down, Left, Right) with a cost of 1.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Heuristic</h4>
+            <p>Manhattan Distance: <code>h(n) = |x₁-x₂| + |y₁-y₂|</code>. Admissible for 4-directional grids — never overestimates.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ---- MAP COLORING MODULE ---- -->
+    <section id="module-mapcolor" class="module">
+      <div class="module-header">
+        <h2>Map Coloring — Interactive CSP with Backtracking</h2>
+        <p class="module-desc">Click a region to select it, then choose a color. The AI CSP solver will automatically color the remaining regions using Backtracking + Forward Checking.</p>
+      </div>
+      <div class="module-layout">
+        <div class="panel-left">
+          <div class="controls-bar">
+            <button class="btn-primary" id="mc-solve">🎲 Demo (Random)</button>
+            <button class="btn-secondary" id="mc-reset">⟳ Reset</button>
+            <button class="btn-secondary" id="mc-step">Step →</button>
+            <div class="stat-box">
+              <span>AI Steps: <strong id="mc-steps">0</strong></span>
+              <span>Backtracks: <strong id="mc-backtracks">0</strong></span>
+            </div>
+          </div>
+          <!-- Color palette for user to pick a color -->
+          <div class="mc-picker-row">
+            <span class="mc-picker-label">🎨 Color Palette:</span>
+            <div id="mc-color-picker" class="mc-color-picker"></div>
+          </div>
+          <!-- Status bar -->
+          <div id="mc-status-bar" class="mc-status-bar">Click any region to select it, then choose a color from the palette.</div>
+          <div id="mc-canvas-container">
+            <svg id="mc-svg" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div id="mc-log" class="log-panel"></div>
+        </div>
+        <aside class="theory-panel">
+          <h3>Theory</h3>
+          <div class="theory-section">
+            <h4>How to Use</h4>
+            <p><strong>1.</strong> Click any region on the map to select it (it will glow).<br/><strong>2.</strong> Pick a valid color from the palette — conflicting colors are disabled.<br/><strong>3.</strong> The AI instantly solves the rest using CSP backtracking!</p>
+          </div>
+          <div class="theory-section">
+            <h4>Algorithm</h4>
+            <p>Constraint Satisfaction Problem (CSP) solved by Recursive Backtracking + Forward Checking to prune domains early.</p>
+          </div>
+          <div class="theory-section">
+            <h4>State Space</h4>
+            <p>A partial or complete assignment of colors to 6 variables (regions). With 4 colors, the raw space is 4⁶ = 4096 states.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Initial State</h4>
+            <p>All regions are unassigned. Each has a domain of {Red, Green, Blue, Yellow}. Your pick <strong>fixes</strong> one variable.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Transition Model</h4>
+            <p>A transition assigns a color from its domain to the next uncolored region. Forward Checking removes that color from adjacent domains.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Constraint</h4>
+            <p>Binary constraint: for every edge (A, B) in the map graph, <code>Color(A) ≠ Color(B)</code>.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ---- CHECKERS MODULE ---- -->
+    <section id="module-checkers" class="module">
+      <div class="module-header">
+        <h2>Checkers — Minimax with Alpha-Beta Pruning</h2>
+        <p class="module-desc">You play as <span style="color:var(--clr-red-piece)">●</span> Red. AI plays as <span style="color:#ccc">●</span> Black (Dark). Click a piece to select, then click a highlighted square to move.</p>
+      </div>
+      <div class="module-layout">
+        <div class="panel-left">
+          <div class="controls-bar">
+            <button class="btn-secondary" id="ck-reset">⟳ New Game</button>
+            <div class="stat-box">
+              <span>Red Pieces: <strong id="ck-red-count">12</strong></span>
+              <span>Black Pieces: <strong id="ck-black-count">12</strong></span>
+              <span>Turn: <strong id="ck-turn">Red</strong></span>
+            </div>
+          </div>
+          <div id="ck-board-container">
+            <canvas id="ck-board" width="480" height="480"></canvas>
+          </div>
+          <div id="ck-status" class="status-bar">Select a red piece to begin.</div>
+        </div>
+        <aside class="theory-panel">
+          <h3>Theory</h3>
+          <div class="theory-section">
+            <h4>Algorithm</h4>
+            <p>Minimax searches the game tree to find the move that maximizes AI's minimum guaranteed score. Alpha-Beta prunes branches that can't affect the final result.</p>
+          </div>
+          <div class="theory-section">
+            <h4>State Space</h4>
+            <p>Each board configuration (positions and types of all 24 pieces) is a unique state. The branching factor is ~7 typical moves.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Initial State</h4>
+            <p>12 red pieces on rows 5-7 and 12 black pieces on rows 0-2 in a standard checkers setup.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Transition Model</h4>
+            <p>Apply a valid move (slide or jump) to a board state to produce the successor state. Captured pieces are removed.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Evaluation Function</h4>
+            <p><code>f(state) = (Black pieces) - (Red pieces)</code>. Kings count as 1.5. Goal states return ±∞.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ---- TOWER OF HANOI MODULE ---- -->
+    <section id="module-hanoi" class="module">
+      <div class="module-header">
+        <h2>Tower of Hanoi — Recursive State-Space Search</h2>
+        <p class="module-desc">Choose the number of disks, then watch the optimal solution unfold step by step.</p>
+      </div>
+      <div class="module-layout">
+        <div class="panel-left">
+          <div class="controls-bar">
+            <label for="hanoi-disks">Disks:</label>
+            <select id="hanoi-disks" class="select-input">
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <button class="btn-primary" id="hanoi-solve">▶ Solve</button>
+            <button class="btn-secondary" id="hanoi-reset">⟳ Reset</button>
+            <label for="hanoi-speed">Speed:</label>
+            <input type="range" id="hanoi-speed" min="100" max="1200" value="600" step="100"/>
+            <div class="stat-box">
+              <span>Move: <strong id="hanoi-move-num">0</strong> / <strong id="hanoi-total-moves">0</strong></span>
+            </div>
+          </div>
+          <canvas id="hanoi-canvas" width="700" height="280"></canvas>
+          <div id="hanoi-log" class="log-panel"></div>
+        </div>
+        <aside class="theory-panel">
+          <h3>Theory</h3>
+          <div class="theory-section">
+            <h4>Algorithm</h4>
+            <p>Recursive state-space search: <code>solve(n, src, dst, aux)</code>. Move n-1 disks to aux, move disk n to dst, then move n-1 disks from aux to dst.</p>
+          </div>
+          <div class="theory-section">
+            <h4>State Space</h4>
+            <p>A state is the distribution of N disks across 3 pegs. Total states = 3ᴺ. For N=5, this is 243 unique configurations.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Initial State</h4>
+            <p>All N disks are stacked on Peg A (Left) in descending order (largest at bottom).</p>
+          </div>
+          <div class="theory-section">
+            <h4>Transition Model</h4>
+            <p>Move the top disk from one peg to another, provided the destination peg is empty or its top disk is larger.</p>
+          </div>
+          <div class="theory-section">
+            <h4>Optimal Moves</h4>
+            <p>The minimum number of moves is <code>2ᴺ - 1</code>. For 3 disks: 7, for 4: 15, for 5: 31 moves.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Games & Algorithms</p>
+  </footer>
+
+  <!-- Scripts loaded as modules -->
+  <script src="modules/pathfinder.js"></script>
+  <script src="modules/map_coloring.js"></script>
+  <script src="modules/checkers.js"></script>
+  <script src="modules/hanoi.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
