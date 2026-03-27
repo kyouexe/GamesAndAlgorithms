@@ -1,11 +1,3 @@
-/**
- * CHECKERS.JS — Minimax with Alpha-Beta Pruning
- *
- * Algorithm:  Minimax (depth-limited) with Alpha-Beta Pruning
- * State Space: Board configurations of up to 24 pieces
- * Eval Fn:    (AI black pieces * 1.0 + AI kings * 0.5) - (Red pieces * 1.0 + Red kings * 0.5)
- * Players:    Human = RED (moves up), AI = BLACK (moves down)
- */
 
 (function CheckersModule() {
   const canvas      = document.getElementById('ck-board');

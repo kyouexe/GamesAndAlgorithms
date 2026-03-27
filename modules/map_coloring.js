@@ -1,15 +1,4 @@
-/**
- * MAP_COLORING.JS — Interactive CSP Solver
- *
- * Algorithm:  Recursive backtracking CSP with Forward Checking
- * State Space: Partial/complete color assignments to 6 regions
- * Constraint:  Adjacent regions must have different colors (4-color theorem)
- *
- * Interaction:
- *   1. User clicks a region on the SVG map to select it.
- *   2. User picks a color from the color palette.
- *   3. The AI CSP solver colors all remaining unassigned regions.
- */
+
 
 (function MapColoringModule() {
   // ---------- Constants ----------
