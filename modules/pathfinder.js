@@ -1,10 +1,3 @@
-/**
- * PATHFINDER.JS — A* Search Algorithm Visualizer
- * 
- * Algorithm:  A* with Manhattan Distance heuristic
- * State Space: 20x20 grid cells (up to 400 nodes)
- * Heuristic:  h(n) = |x - goalX| + |y - goalY|  (admissible for 4-directional grids)
- */
 
 (function PathfinderModule() {
   const ROWS = 20, COLS = 20;
